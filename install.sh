@@ -4,18 +4,23 @@
 sudo apt-get update
 sudo apt-get install -y jq openssl qrencode
 
-curl -s https://raw.githubusercontent.com/sajjaddg/xray-reality/master/default.json > config.json
+curl -s https://raw.githubusercontent.com/MohammadS3dd/xray-reality/master/default.json > config.json
 
 # Extract the desired variables using jq
 name=$(jq -r '.name' config.json)
 email=$(jq -r '.email' config.json)
-port=$(jq -r '.port' config.json)
-sni=$(jq -r '.sni' config.json)
 path=$(jq -r '.path' config.json)
+
+# Prompt user for custom port and SNI values
+read -p "Enter a custom port (default $((port:=$(jq -r '.port' config.json)))): " custom_port
+read -p "Enter a custom SNI (default $((sni:=($(jq -r '.sni' config.json))))): " custom_sni
+
+port=${custom_port:-$port}
+sni=${custom_sni:-$sni}
 
 bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install --beta
 
-json=$(curl -s https://raw.githubusercontent.com/sajjaddg/xray-reality/master/config.json)
+json=$(curl -s https://raw.githubusercontent.com/MohammadS3dd/xray-reality/master/config.json)
 
 keys=$(xray x25519)
 pk=$(echo "$keys" | awk '/Private key:/ {print $3}')
