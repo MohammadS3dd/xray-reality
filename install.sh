@@ -12,8 +12,8 @@ email=$(jq -r '.email' config.json)
 path=$(jq -r '.path' config.json)
 
 # Prompt user for custom port and SNI values
-read -p "Enter a custom port (default $((port:=$(jq -r '.port' config.json)))): " custom_port
-read -p "Enter a custom SNI (default $((sni:=($(jq -r '.sni' config.json))))): " custom_sni
+read -p "Enter a custom port : " custom_port
+read -p "Enter a custom SNI : " custom_sni
 
 port=${custom_port:-$port}
 sni=${custom_sni:-$sni}
